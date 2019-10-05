@@ -3,9 +3,9 @@
 /**
  * $source is the source image path.
  * $target is the target image path.
- * $toAtLeastSizeInBytes > 0
- * $toAtMostCompressionLevel in [0.0, 1.0]
- * $maxCompressionError in (0.0, 1.0]
+ * $toAtLeastSizeInBytes must be > 0
+ * $toAtMostCompressionLevel must be in range [0.0, 1.0]
+ * $maxCompressionError must be in range (0.0, 1.0]
  *
  * Returns an associative array with the keys: 'success', 'last_size' and 
  * 'last_compression_level'.
@@ -113,10 +113,10 @@ function compressImage_($source, $target, $toAtLeastSizeInBytes,
 /**
  * $source is the source image path.
  * $target is the target image path.
- * $toAtLeastSizeInBytes > 0
- * $toAtMostScalingLevel in (0.0, 1.0]
- * $maxScalingError in (0.0, 1.0]
- * $compressionLevel in [0.0, 1.0]
+ * $toAtLeastSizeInBytes must be > 0
+ * $toAtMostScalingLevel must be in range (0.0, 1.0]
+ * $maxScalingError must be in range (0.0, 1.0]
+ * $compressionLevel must be in range [0.0, 1.0]
  *
  * Returns an associative array with the keys: 'success', 'last_size', 
  * 'last_scaling_level', 'last_width' and 'last_height'.
@@ -253,11 +253,11 @@ function scaleImage_($source, $target, $toAtLeastSizeInBytes,
 /**
  * $source is the source image path.
  * $target is the target image path.
- * $toAtLeastSizeInBytes > 0
- * $toAtMostCompressionLevel in [0.0, 1.0]
- * $maxCompressionError in (0.0, 1.0]
- * $toAtMostScalingLevel in (0.0, 1.0]
- * $maxScalingError in (0.0, 1.0]
+ * $toAtLeastSizeInBytes must be > 0
+ * $toAtMostCompressionLevel must be in range [0.0, 1.0]
+ * $maxCompressionError must be in range (0.0, 1.0]
+ * $toAtMostScalingLevel must be in range (0.0, 1.0]
+ * $maxScalingError must be in range (0.0, 1.0]
  *
  * Calls compressImage_($source, $target, $toAtLeastSizeInBytes, 
  *                      $toAtMostCompressionLevel,
@@ -291,10 +291,12 @@ function reduceImageFileSize_($source, $target, $toAtLeastSizeInBytes,
 // The default compression values are good for JPEG format. High compression
 // level values may result in poor image quality due to the lossy compression
 // method of JPEG.
-var_dump(reduceImageFileSize_('image.jpg', 'reduced-image.jpg', 700 * 1024));
+//
+// var_dump(reduceImageFileSize_('image.jpg', 'reduced-image.jpg', 700 * 1024));
 
 // With PNG we can use the highest compression level without losing quality at
 // the expense of execution time.
-var_dump(reduceImageFileSize_('image.png', 'reduced-image.png', 700 * 1024, 1.0, 1.0, 0.8));
+//
+// var_dump(reduceImageFileSize_('image.png', 'reduced-image.png', 700 * 1024, 1.0, 1.0, 0.8));
 
 ?>
