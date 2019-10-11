@@ -1,5 +1,34 @@
 <?php 
 
+function fixImageOrientation_($img, $source) {
+    $headers = exif_read_data($source);
+    
+    if ($headers === false) {
+        return true;
+    }
+    
+    $orientation = $headers['Orientation'] ?? null;
+    
+    if ($orientation === null) {
+        return true;
+    }
+    
+    $orientationToDegrees = array(
+        3 => 180,
+        6 => -90,
+        8 => 90,
+    );
+    
+    $degrees = $orientationToDegrees[$orientation] ?? null;
+    
+    if ($degrees === null) {
+        return false;
+    }
+    
+    $rotatedImg = imagerotate($img, $degrees, 0);
+    return $rotatedImg;
+}
+
 /**
  * $source is the source image path.
  * $target is the target image path.
@@ -98,7 +127,17 @@ function compressImage_($source, $target, $toAtLeastSizeInBytes,
     unlink($tmpFile);
     
     if ($size !== null && $size <= $toAtLeastSizeInBytes) {
-        $success = $imageDumpFunc($img, $target, $translatedCompressionLevel);
+        $rotatedImg = fixImageOrientation_($img, $source);
+        
+        if ($rotatedImg === false) {
+            $success = false;
+        }
+        elseif ($rotatedImg !== true) {
+            $success = $imageDumpFunc($rotatedImg, $target, $translatedCompressionLevel);
+        }
+        else {
+            $success = $imageDumpFunc($img, $target, $translatedCompressionLevel);
+        }
     }
     else {
         $success = false;
