@@ -25,7 +25,7 @@ def eval_(expr):
         regex = bin_op_regex.format(ops=ops)
         while re.search(regex, expr):
             expr = re.sub(regex,
-                lambda m: str(op[m['op']](float(m['left']), float(m['right']))),
+                lambda m: re.sub(r'^(?!-)', '+', str(op[m['op']](float(m['left']), float(m['right'])))),
                 expr, 1)
     float_res = float(expr)
     int_res = int(float_res)
